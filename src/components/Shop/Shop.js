@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Cart from '../Cart/Cart';
 import Product from '../Product/Product';
 import './Shop.css';
-import productData from '../../fakeData/products.json'
 import { addToDatabaseCart } from '../../utilities/databaseManager';
+import fakeData from '../../fakeData/products.js';
 
 const Shop = () => {
   const [product, setProduct] = useState([]);
   const [cart, setCart] = useState([]);
 
-  useEffect(() => setProduct(productData), [])
+  useEffect(() => setProduct(fakeData), [])
 
   const handleAddProduct = product => {
     const newCart = [...cart, product]
