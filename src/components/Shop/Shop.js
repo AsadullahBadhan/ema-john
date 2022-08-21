@@ -4,6 +4,7 @@ import Product from '../Product/Product';
 import './Shop.css';
 import { addToDatabaseCart, getDatabaseCart } from '../../utilities/databaseManager';
 import fakeData from '../../fakeData/products.js';
+import { Link } from 'react-router-dom';
 
 const Shop = () => {
   const [product, setProduct] = useState([]);
@@ -23,9 +24,9 @@ const Shop = () => {
   }, []);
 
   const handleAddProduct = product => {
-    const sameItem = cart.find(pd => pd.key === product.key);
     let count = 1;
     let newCart;
+    const sameItem = cart.find(pd => pd.key === product.key);
     if (sameItem) {
       count = sameItem.quantity + 1;
       sameItem.quantity = count;
@@ -52,7 +53,9 @@ const Shop = () => {
         }
       </div>
       <div className="cart-container">
-        <Cart cart={cart}></Cart>
+        <Cart cart={cart}>
+          <button className="main-btn"><Link to='/review'>Review your order</Link></button>
+        </Cart>
       </div>
 
     </div>
