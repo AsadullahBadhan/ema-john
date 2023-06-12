@@ -1,50 +1,87 @@
-import React, { useRef, useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import React, { useRef, useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const confirmPasswordRef = useRef();
-  const { signUpwithEmail } = useAuth();
-  const [error, setError] = useState('');
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const confirmPasswordRef = useRef();
+    const { signUpwithEmail } = useAuth();
+    const [error, setError] = useState("");
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+    async function handleSubmit(e) {
+        e.preventDefault();
 
-    if (passwordRef.current.value !== confirmPasswordRef.current.value) {
-      return setError('Password do not match');
+        if (passwordRef.current.value !== confirmPasswordRef.current.value) {
+            return setError("Password do not match");
+        }
+
+        try {
+            setError("");
+            await signUpwithEmail(
+                emailRef.current.value,
+                passwordRef.current.value
+            );
+        } catch (err) {
+            console.log(err);
+            setError("Failed to Sign up");
+        }
     }
 
-    try {
-      setError('');
-      await signUpwithEmail(emailRef.current.value, passwordRef.current.value)
-    } catch (err) {
-      console.log(err);
-      setError('Failed to Sign up')
-    }
-  }
+    return (
+        <div className="form-container">
+            {error && <p style={{ color: "red" }}>{error}</p>}
+            <div className="login-form">
+                <h2>Sign Up</h2>
 
-  return (
-    <>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email</label>
-        <input type="email" name="email" ref={emailRef} />
+                <form onSubmit={handleSubmit}>
+                    <div className="input-container">
+                        <input
+                            type="email"
+                            name="email"
+                            ref={emailRef}
+                            required
+                        />
+                        <label htmlFor="email">
+                            <span className="label-name">Email</span>
+                        </label>
+                    </div>
 
-        <label htmlFor="password">Password</label>
-        <input type="password" name="password" ref={passwordRef} />
+                    <div className="input-container">
+                        <input
+                            type="password"
+                            name="password"
+                            ref={passwordRef}
+                            required
+                        />
+                        <label htmlFor="password">
+                            <span className="label-name">Password</span>
+                        </label>
+                    </div>
 
-        <label htmlFor="confirm-password">Confirm Password</label>
-        <input type="password" name="confirm-password" ref={confirmPasswordRef} />
+                    <div className="input-container">
+                        <input
+                            type="password"
+                            name="password"
+                            ref={confirmPasswordRef}
+                            required
+                        />
+                        <label htmlFor="password">
+                            <span className="label-name">Confirm Password</span>
+                        </label>
+                    </div>
 
-        <button type="submit">Sign Up</button>
-      </form>
-      <div>
-        <p>Already have an account? Log In</p>
-      </div>
-    </>
-  );
+                    <button type="submit" className="login">
+                        Sign Up
+                    </button>
+                </form>
+
+                <p className="signup-text">
+                    Already have an account? <Link to="/login">Log In</Link>
+                </p>
+            </div>
+        </div>
+    );
 };
 
 export default SignUp;
-
